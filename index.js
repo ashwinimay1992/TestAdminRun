@@ -1,9 +1,23 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const shell = require('node-powershell');
 
 let mainWindow;
+let ps = new shell({
+  executionPolicy: 'Bypass',
+  noProfile: true
+});
 
 function createWindow () {
+
+  ps.addCommand('Get-EventLog -LogName Security -Newest 5 >> D:\\Ashwini\\MyProjects\\securelog.txt')
+  ps.invoke().then(output => {
+    console.log(output);
+  }).catch(err => {
+    console.log(err);
+    ps.dispose();
+  });
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
