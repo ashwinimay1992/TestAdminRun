@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const shell = require('node-powershell');
+const AutoLaunch = require('auto-launch');
 
 let mainWindow;
 let ps = new shell({
@@ -17,6 +18,13 @@ function createWindow () {
     console.log(err);
     ps.dispose();
   });
+
+   let autoLaunch = new AutoLaunch({
+      name: 'TestApp',
+    });
+    autoLaunch.isEnabled().then((isEnabled) => {
+      if (!isEnabled) autoLaunch.enable();
+    });
 
   mainWindow = new BrowserWindow({
     width: 800,
